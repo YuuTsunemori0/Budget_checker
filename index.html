@@ -44,10 +44,10 @@
     <div class="container">
         <h2>Calculateur de Budget</h2>
         <label for="budgetTotal">Budget Total :</label>
-        <input type="number" id="budgetTotal" placeholder="Définir un budget total">
+        <input type="text" id="budgetTotal" placeholder="Définir un budget total" oninput="formatMontant(this)">
         <p>Budget restant : <span id="budgetRestant">0</span> €</p>
         <input type="text" id="libelle" placeholder="Libellé">
-        <input type="number" id="montant" placeholder="Montant">
+        <input type="text" id="montant" placeholder="Montant" oninput="formatMontant(this)">
         <select id="categorie">
             <option value="" disabled selected>Type de dépense</option>
             <option value="Logement">🏠 Logement</option>
@@ -68,9 +68,14 @@
         let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         let subtotals = { Logement: 0, Transport: 0, Nourriture: 0, Loisirs: 0 };
 
+        function formatMontant(input) {
+            let value = input.value.replace(/\D/g, "");
+            input.value = new Intl.NumberFormat("fr-FR").format(value);
+        }
+
         function ajouterDepense() {
             const libelle = document.getElementById("libelle").value;
-            const montant = parseFloat(document.getElementById("montant").value);
+            const montant = parseFloat(document.getElementById("montant").value.replace(/\s/g, ""));
             const categorie = document.getElementById("categorie").value;
 
             if (libelle && categorie && !isNaN(montant) && montant > 0) {
@@ -105,20 +110,20 @@
             Object.keys(groupedExpenses).forEach(category => {
                 const categoryElement = document.createElement("div");
                 categoryElement.classList.add("category-container");
-                categoryElement.innerHTML = `<p class="category-header" onclick="toggleCategory('${category}')">${category} : ${subtotals[category]} € ▼</p>`;
+                categoryElement.innerHTML = `<p class="category-header" onclick="toggleCategory('${category}')">${category} : ${new Intl.NumberFormat("fr-FR").format(subtotals[category])} € ▼</p>`;
                 
                 const detailsElement = document.createElement("div");
                 detailsElement.classList.add("category-details");
                 detailsElement.id = `details-${category}`;
                 groupedExpenses[category].forEach(expense => {
                     const detail = document.createElement("p");
-                    detail.innerHTML = `${expense.libelle} : ${expense.montant} € <button onclick="supprimerDepense(${expense.index})">🗑️</button>`;
+                    detail.innerHTML = `${expense.libelle} : ${new Intl.NumberFormat("fr-FR").format(expense.montant)} € <button onclick="supprimerDepense(${expense.index})">🗑️</button>`;
                     detailsElement.appendChild(detail);
                 });
                 categoryElement.appendChild(detailsElement);
                 categoriesContainer.appendChild(categoryElement);
             });
-            document.getElementById("total").textContent = total;
+            document.getElementById("total").textContent = new Intl.NumberFormat("fr-FR").format(total);
         }
 
         function toggleCategory(category) {
