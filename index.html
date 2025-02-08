@@ -44,10 +44,10 @@
     <div class="container">
         <h2>Calculateur de Budget</h2>
         <label for="budgetTotal">Budget Total :</label>
-        <input type="text" id="budgetTotal" placeholder="Définir un budget total" oninput="formatMontant()">
+        <input type="number" id="budgetTotal" placeholder="Définir un budget total">
         <p>Budget restant : <span id="budgetRestant">0</span> €</p>
         <input type="text" id="libelle" placeholder="Libellé">
-        <input type="text" id="montant" placeholder="Montant" oninput="formatMontant()">
+        <input type="number" id="montant" placeholder="Montant">
         <select id="categorie">
             <option value="" disabled selected>Type de dépense</option>
             <option value="Logement">🏠 Logement</option>
@@ -68,20 +68,15 @@
         let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
         let subtotals = { Logement: 0, Transport: 0, Nourriture: 0, Loisirs: 0 };
 
-        function formatMontant() {
-            document.querySelectorAll("#montant, #budgetTotal").forEach(input => {
-                let value = input.value.replace(/[^0-9,.]/g, "");
-                input.value = new Intl.NumberFormat("fr-FR", { minimumFractionDigits: 2 }).format(value);
-            });
-        }
-
         function ajouterDepense() {
             const libelle = document.getElementById("libelle").value;
-            const montant = parseFloat(document.getElementById("montant").value.replace(/\s/g, "").replace(",", "."));
+            const montant = parseFloat(document.getElementById("montant").value);
             const categorie = document.getElementById("categorie").value;
 
             if (libelle && categorie && !isNaN(montant) && montant > 0) {
                 expenses.push({ libelle, montant, categorie });
+                subtotals[categorie] += montant;
+                total += montant;
                 localStorage.setItem("expenses", JSON.stringify(expenses));
                 afficherDepenses();
             }
@@ -94,26 +89,41 @@
         function afficherDepenses() {
             const categoriesContainer = document.getElementById("categories");
             categoriesContainer.innerHTML = "";
+            total = 0;
+            subtotals = { Logement: 0, Transport: 0, Nourriture: 0, Loisirs: 0 };
 
+            let groupedExpenses = {};
             expenses.forEach((expense, index) => {
-                const expenseElement = document.createElement("p");
-                expenseElement.innerHTML = `${expense.libelle} : ${new Intl.NumberFormat("fr-FR").format(expense.montant)} € ` +
-                    `<button onclick="modifierDepense(${index})">📝</button>` +
-                    `<button onclick="supprimerDepense(${index})">🗑️</button>`;
-                categoriesContainer.appendChild(expenseElement);
+                if (!groupedExpenses[expense.categorie]) {
+                    groupedExpenses[expense.categorie] = [];
+                }
+                groupedExpenses[expense.categorie].push({ ...expense, index });
+                total += expense.montant;
+                subtotals[expense.categorie] += expense.montant;
             });
+            
+            Object.keys(groupedExpenses).forEach(category => {
+                const categoryElement = document.createElement("div");
+                categoryElement.classList.add("category-container");
+                categoryElement.innerHTML = `<p class="category-header" onclick="toggleCategory('${category}')">${category} : ${subtotals[category]} € ▼</p>`;
+                
+                const detailsElement = document.createElement("div");
+                detailsElement.classList.add("category-details");
+                detailsElement.id = `details-${category}`;
+                groupedExpenses[category].forEach(expense => {
+                    const detail = document.createElement("p");
+                    detail.innerHTML = `${expense.libelle} : ${expense.montant} € <button onclick="supprimerDepense(${expense.index})">🗑️</button>`;
+                    detailsElement.appendChild(detail);
+                });
+                categoryElement.appendChild(detailsElement);
+                categoriesContainer.appendChild(categoryElement);
+            });
+            document.getElementById("total").textContent = total;
         }
 
-        function modifierDepense(index) {
-            const newLibelle = prompt("Modifier le libellé :", expenses[index].libelle);
-            const newMontant = parseFloat(prompt("Modifier le montant :", expenses[index].montant).replace(",", "."));
-            
-            if (newLibelle && !isNaN(newMontant) && newMontant > 0) {
-                expenses[index].libelle = newLibelle;
-                expenses[index].montant = newMontant;
-                localStorage.setItem("expenses", JSON.stringify(expenses));
-                afficherDepenses();
-            }
+        function toggleCategory(category) {
+            const details = document.getElementById(`details-${category}`);
+            details.style.display = details.style.display === "none" || details.style.display === "" ? "block" : "none";
         }
 
         function supprimerDepense(index) {
