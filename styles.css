@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.container {
+    max-width: 400px;
+    margin: auto;
+}
+input, button, select {
+    display: block;
+    margin: 10px 0;
+    width: 100%;
+    padding: 10px;
+}
+#total, .subtotal {
+    font-weight: bold;
+}
+.error {
+    color: red;
+    font-size: 0.9em;
+}
+.expense-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.category-container {
+    margin-top: 10px;
+}
+.category-header {
+    cursor: pointer;
+    font-weight: bold;
+}
+.category-details {
+    display: none;
+    margin-left: 20px;
+}
