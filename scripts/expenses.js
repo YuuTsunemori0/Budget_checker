@@ -1,5 +1,13 @@
 let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-let subtotals = { Logement: 0, Transport: 0, Nourriture: 0, Loisirs: 0 };
+let subtotals = {};
+
+// Initialiser les sous-totaux
+function initialiserSousTotaux() {
+    subtotals = {};
+    categories.forEach(cat => {
+        subtotals[cat.nom] = 0;
+    });
+}
 
 // Fonction pour ajouter une nouvelle dépense
 function ajouterDepense() {
@@ -48,3 +56,29 @@ function ajouterDepense() {
     document.getElementById("montant").value = "";
     document.getElementById("categorie").selectedIndex = 0;
 }
+
+// Fonction pour supprimer une dépense
+function supprimerDepense(index) {
+    const expense = expenses[index];
+
+    if (expense) {
+        // Mettre à jour les sous-totaux et le total général
+        subtotals[expense.categorie] -= expense.montant;
+        total -= expense.montant;
+
+        // Supprimer la dépense du tableau
+        expenses.splice(index, 1);
+        localStorage.setItem("expenses", JSON.stringify(expenses));
+
+        // Mise à jour de l'affichage et du budget restant
+        afficherDepenses();
+        mettreAJourTotal();
+        mettreAJourBudgetRestant();
+    }
+}
+
+// Mise à jour des catégories si elles ont changé
+document.addEventListener("DOMContentLoaded", () => {
+    initialiserSousTotaux();
+    afficherDepenses();
+});
