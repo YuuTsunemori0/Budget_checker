@@ -1,3 +1,4 @@
+// Fonction pour formater les montants en milliers avec espaces
 function formatMontant(input) {
     let value = input.value.replace(/\D/g, "");
     if (value) {
@@ -5,10 +6,12 @@ function formatMontant(input) {
     }
 }
 
+// Fonction pour mettre à jour l'affichage du total
 function mettreAJourTotal() {
     document.getElementById("total").textContent = new Intl.NumberFormat("fr-FR").format(total);
 }
 
+// Fonction pour afficher les dépenses et leurs catégories
 function afficherDepenses() {
     const categoriesContainer = document.getElementById("categories");
     categoriesContainer.innerHTML = "";
@@ -46,6 +49,7 @@ function afficherDepenses() {
     mettreAJourTotal();
 }
 
+// Fonction pour afficher ou masquer les détails des catégories
 function toggleCategory(category) {
     const details = document.getElementById(`details-${category}`);
     details.style.display = details.style.display === "none" || details.style.display === "" ? "block" : "none";
