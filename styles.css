@@ -1,36 +1,80 @@
+/* Styles généraux */
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    background-color: #f8f9fa;
+    color: #333;
 }
+
+/* Conteneur principal */
 .container {
     max-width: 400px;
     margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
+
+/* Styles des champs de saisie et des boutons */
 input, button, select {
     display: block;
     margin: 10px 0;
     width: 100%;
     padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
 }
-#total, .subtotal {
-    font-weight: bold;
+
+/* Styles spécifiques aux boutons */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
 }
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Messages d'erreur */
 .error {
     color: red;
     font-size: 0.9em;
 }
+
+/* Affichage des dépenses */
 .expense-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #f1f1f1;
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 5px;
 }
+
+/* Conteneurs des catégories */
 .category-container {
     margin-top: 10px;
+    background: #e9ecef;
+    padding: 10px;
+    border-radius: 5px;
 }
+
+/* En-têtes des catégories */
 .category-header {
     cursor: pointer;
     font-weight: bold;
+    padding: 8px;
+    background: #dee2e6;
+    border-radius: 5px;
 }
+
+/* Détails des dépenses */
 .category-details {
     display: none;
     margin-left: 20px;
