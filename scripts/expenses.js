@@ -1,6 +1,3 @@
-let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-let subtotals = { Logement: 0, Transport: 0, Nourriture: 0, Loisirs: 0 };
-
 function ajouterDepense() {
     const libelle = document.getElementById("libelle").value;
     const montantStr = document.getElementById("montant").value.replace(/\s/g, "").replace(",", ".");
