@@ -22,6 +22,10 @@
         #total, .subtotal {
             font-weight: bold;
         }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
         .expense-item {
             display: flex;
             justify-content: space-between;
@@ -47,7 +51,9 @@
         <input type="text" id="budgetTotal" placeholder="Définir un budget total" oninput="formatMontant(this)">
         <p>Budget restant : <span id="budgetRestant">0</span> €</p>
         <input type="text" id="libelle" placeholder="Libellé">
+        <p class="error" id="errorLibelle"></p>
         <input type="text" id="montant" placeholder="Montant" oninput="formatMontant(this)">
+        <p class="error" id="errorMontant"></p>
         <select id="categorie">
             <option value="" disabled selected>Type de dépense</option>
             <option value="Logement">🏠 Logement</option>
@@ -77,14 +83,26 @@
             const libelle = document.getElementById("libelle").value;
             const montant = parseFloat(document.getElementById("montant").value.replace(/\s/g, ""));
             const categorie = document.getElementById("categorie").value;
-
-            if (libelle && categorie && !isNaN(montant) && montant > 0) {
-                expenses.push({ libelle, montant, categorie });
-                subtotals[categorie] += montant;
-                total += montant;
-                localStorage.setItem("expenses", JSON.stringify(expenses));
-                afficherDepenses();
+            let valid = true;
+            
+            document.getElementById("errorLibelle").textContent = "";
+            document.getElementById("errorMontant").textContent = "";
+            
+            if (!libelle) {
+                document.getElementById("errorLibelle").textContent = "Veuillez saisir un libellé.";
+                valid = false;
             }
+            if (isNaN(montant) || montant <= 0) {
+                document.getElementById("errorMontant").textContent = "Veuillez saisir un montant valide.";
+                valid = false;
+            }
+            if (!valid) return;
+
+            expenses.push({ libelle, montant, categorie });
+            subtotals[categorie] += montant;
+            total += montant;
+            localStorage.setItem("expenses", JSON.stringify(expenses));
+            afficherDepenses();
             
             document.getElementById("libelle").value = "";
             document.getElementById("montant").value = "";
@@ -125,27 +143,6 @@
             });
             document.getElementById("total").textContent = new Intl.NumberFormat("fr-FR").format(total);
         }
-
-        function toggleCategory(category) {
-            const details = document.getElementById(`details-${category}`);
-            details.style.display = details.style.display === "none" || details.style.display === "" ? "block" : "none";
-        }
-
-        function supprimerDepense(index) {
-            expenses.splice(index, 1);
-            localStorage.setItem("expenses", JSON.stringify(expenses));
-            afficherDepenses();
-        }
-
-        function reinitialiserDepenses() {
-            if (confirm("Voulez-vous vraiment réinitialiser toutes les dépenses ?")) {
-                expenses = [];
-                localStorage.removeItem("expenses");
-                afficherDepenses();
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", afficherDepenses);
     </script>
 </body>
 </html>
