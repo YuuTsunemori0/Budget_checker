@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h2>Calculateur de Budget</h2>
-        
+
         <!-- Budget total -->
         <label for="budgetTotal">Budget Total :</label>
         <input type="text" id="budgetTotal" placeholder="Définir un budget total" oninput="formatMontant(this)">
@@ -22,14 +22,26 @@
         <input type="text" id="montant" placeholder="Montant" oninput="formatMontant(this)">
         <p class="error" id="errorMontant"></p>
 
+        <!-- Menu déroulant des catégories -->
         <select id="categorie">
             <option value="" disabled selected>Type de dépense</option>
-            <option value="Logement">🏠 Logement</option>
-            <option value="Transport">🚕 Transport</option>
-            <option value="Nourriture">🍔 Nourriture</option>
-            <option value="Loisirs">🎟️ Loisirs</option>
         </select>
         <p class="error" id="errorCategorie"></p>
+
+        <!-- Bouton pour gérer les catégories -->
+        <button onclick="ouvrirGestionCategories()">Gérer les catégories</button>
+
+        <!-- Fenêtre modale pour gérer les catégories -->
+        <div id="modalCategories" class="modal">
+            <div class="modal-content">
+                <h3>Gérer les catégories</h3>
+                <input type="text" id="nouvelleCategorie" placeholder="Nom de la catégorie">
+                <input type="text" id="emojiCategorie" placeholder="Emoji (ex: 🏡)">
+                <button onclick="ajouterCategorie()">Ajouter</button>
+                <ul id="listeCategories"></ul>
+                <button onclick="fermerGestionCategories()">Fermer</button>
+            </div>
+        </div>
 
         <!-- Boutons -->
         <button onclick="ajouterDepense()">Ajouter</button>
@@ -47,5 +59,6 @@
     <script src="scripts/budget.js"></script>
     <script src="scripts/expenses.js"></script>
     <script src="scripts/ui.js"></script>
+    <script src="scripts/categories.js"></script>
 </body>
 </html>
