@@ -21,7 +21,7 @@ function mettreAJourMenuCategories() {
     localStorage.setItem("categories", JSON.stringify(categories));
 }
 
-// Ouvre la gestion des catégories
+// Ouvre la gestion des catégories (affiche la popup)
 function ouvrirGestionCategories() {
     document.getElementById("modalCategories").style.display = "block";
     afficherCategories();
@@ -54,20 +54,7 @@ function supprimerCategorie(index) {
     afficherCategories();
 }
 
-// Modifie une catégorie
-function modifierCategorie(index) {
-    const nouveauNom = prompt("Nouveau nom de la catégorie :", categories[index].nom);
-    const nouvelEmoji = prompt("Nouvel emoji :", categories[index].emoji);
-
-    if (nouveauNom && nouvelEmoji) {
-        categories[index].nom = nouveauNom;
-        categories[index].emoji = nouvelEmoji;
-        mettreAJourMenuCategories();
-        afficherCategories();
-    }
-}
-
-// Affiche la liste des catégories dans la fenêtre modale
+// Affiche la liste des catégories dans la popup
 function afficherCategories() {
     const liste = document.getElementById("listeCategories");
     liste.innerHTML = "";
@@ -75,7 +62,6 @@ function afficherCategories() {
     categories.forEach((categorie, index) => {
         const li = document.createElement("li");
         li.innerHTML = `${categorie.emoji} ${categorie.nom} 
-            <button onclick="modifierCategorie(${index})">✏️</button> 
             <button onclick="supprimerCategorie(${index})">🗑️</button>`;
         liste.appendChild(li);
     });
