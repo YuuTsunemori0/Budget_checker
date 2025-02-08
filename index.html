@@ -10,14 +10,7 @@
     <div class="container">
         <h1>💰 Budget Voyage</h1>
 
-        <!-- 📌 Section Budget -->
-        <div class="budget-section">
-            <label for="budgetTotal">Budget Total :</label>
-            <input type="text" id="budgetTotal" placeholder="Définir un budget total">
-            <p>Budget restant : <span id="budgetRestant">0</span> €</p>
-        </div>
-
-        <div class="main-content">
+        <div class="grid-container">
             <!-- 📋 Formulaire Ajout Dépense -->
             <div class="form-section">
                 <h2>➕ Ajouter une Dépense</h2>
@@ -43,8 +36,13 @@
                 <p>Total : <span id="total">0</span> €</p>
             </div>
 
-            <!-- 🎭 Gestion des Catégories -->
-            <div class="categories-section">
+            <!-- 📌 Section Budget & Gestion des Catégories -->
+            <div class="budget-section">
+                <h2>💰 Budget</h2>
+                <label for="budgetTotal">Budget Total :</label>
+                <input type="text" id="budgetTotal" placeholder="Définir un budget total">
+                <p>Budget restant : <span id="budgetRestant">0</span> €</p>
+
                 <h2>🎭 Gérer les Catégories</h2>
                 <button onclick="ouvrirGestionCategories()">🛠️ Gérer</button>
 
@@ -68,7 +66,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, Timestamp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
 
-        // 🔥 Configuration Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCy8_7PjzpZi4I75dtBapp42OpDbd1TYOw",
             authDomain: "budget-checker.firebaseapp.com",
@@ -79,11 +76,9 @@
             measurementId: "G-R10JVNYPZ1"
         };
 
-        // 🔥 Initialiser Firebase & Firestore
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // 📌 Fonction pour ajouter une dépense dans Firestore
         async function ajouterDepense() {
             const libelle = document.getElementById("libelle").value.trim();
             const montantStr = document.getElementById("montant").value.trim();
@@ -107,14 +102,12 @@
                     categorie,
                     date: Timestamp.now()
                 });
-                console.log("✅ Dépense ajoutée avec succès !");
                 afficherDepenses();
             } catch (error) {
                 console.error("❌ Erreur lors de l'ajout :", error);
             }
         }
 
-        // 📌 Fonction pour récupérer et afficher les dépenses
         async function afficherDepenses() {
             const liste = document.getElementById("listeDepenses");
             liste.innerHTML = "";
@@ -132,7 +125,6 @@
             document.getElementById("total").textContent = total;
         }
 
-        // 📌 Chargement des dépenses au démarrage
         afficherDepenses();
     </script>
 
