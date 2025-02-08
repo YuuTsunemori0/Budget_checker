@@ -1,40 +1,67 @@
-/* 🌄 Fond général avec un dégradé inspiré de macOS */
+/* 🌄 Fond général en plein écran */
 body {
     background: linear-gradient(135deg, #e3eaf2, #c9d6df);
     font-family: "SF Pro Display", sans-serif;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
     margin: 0;
 }
 
-/* 📦 Conteneur principal avec effet Glassmorphism */
+/* 🎨 Conteneur principal en mode écran large */
 .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 1200px;
+    height: 90vh;
+    padding: 20px;
+}
+
+/* 📌 Grille pour une meilleure disposition */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+/* 📊 Section du budget */
+.budget-section {
+    text-align: center;
+    padding: 20px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(15px);
-    border-radius: 20px;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
-    padding: 25px;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-    animation: fadeIn 0.6s ease-out;
+    border-radius: 15px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* 🌟 Effet d'apparition fluide */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+/* 📋 Section des dépenses */
+.expenses-section {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    overflow-y: auto;
 }
 
-/* 🎨 Style des champs de saisie inspirés de macOS */
+/* 🎭 Section des catégories */
+.categories-section {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 📌 Formulaire de saisie */
 input, select {
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
@@ -46,17 +73,6 @@ input, select {
     color: #333;
     outline: none;
     transition: all 0.3s ease;
-}
-
-/* 🌙 Placeholder plus subtil */
-input::placeholder {
-    color: rgba(0, 0, 0, 0.4);
-}
-
-/* 📌 Effet au focus */
-input:focus, select:focus {
-    background: rgba(255, 255, 255, 0.5);
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* 🎛️ Style des boutons façon macOS */
@@ -72,58 +88,9 @@ button {
     font-size: 16px;
 }
 
-/* 🌟 Effet au survol */
 button:hover {
     background: rgba(255, 255, 255, 0.5);
     transform: scale(1.05);
-}
-
-/* 🚀 Effet "pressé" */
-button:active {
-    transform: scale(0.98);
-}
-
-/* 📋 Liste des dépenses avec effet carte macOS */
-.expense-item {
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(12px);
-    padding: 10px;
-    border-radius: 12px;
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
-}
-
-/* 🎭 Catégories affichées avec un effet translucide */
-.category-container {
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 10px;
-}
-
-/* 🔻 Effet au clic sur les catégories */
-.category-header {
-    cursor: pointer;
-    font-weight: bold;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.category-header:hover {
-    background: rgba(255, 255, 255, 0.6);
-}
-
-/* 📜 Texte des erreurs en rouge doux */
-.error {
-    color: #d63031;
-    font-size: 0.9em;
-    margin-top: 5px;
 }
 
 /* 🌙 Effet pour la popup (modale) */
@@ -148,11 +115,4 @@ button:active {
     margin: 10% auto;
     text-align: center;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* ❌ Bouton de fermeture de la modale */
-.close {
-    float: right;
-    font-size: 24px;
-    cursor: pointer;
 }
