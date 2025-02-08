@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Voyage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+        }
+        input, button {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+            padding: 10px;
+        }
+        #total {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculateur de Budget</h2>
+        <input type="text" id="libelle" placeholder="Libellé">
+        <input type="number" id="montant" placeholder="Montant">
+        <button onclick="ajouterDepense()">Ajouter</button>
+        <ul id="liste"></ul>
+        <p>Total : <span id="total">0</span> €</p>
+    </div>
+
+    <script>
+        let total = 0;
+
+        function ajouterDepense() {
+            const libelle = document.getElementById("libelle").value;
+            const montant = parseFloat(document.getElementById("montant").value);
+            if (libelle && !isNaN(montant) && montant > 0) {
+                const liste = document.getElementById("liste");
+                const element = document.createElement("li");
+                element.textContent = `${libelle} : ${montant} €`;
+                liste.appendChild(element);
+                total += montant;
+                document.getElementById("total").textContent = total;
+                document.getElementById("libelle").value = "";
+                document.getElementById("montant").value = "";
+            }
+        }
+    </script>
+</body>
+</html>
