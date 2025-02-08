@@ -1,85 +1,132 @@
-/* Styles généraux */
+/* 🌄 Fond général avec un dégradé inspiré de macOS */
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: #f8f9fa;
-    color: #333;
+    background: linear-gradient(135deg, #e3eaf2, #c9d6df);
+    font-family: "SF Pro Display", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
-/* Conteneur principal */
+/* 📦 Conteneur principal avec effet Glassmorphism */
 .container {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    width: 90%;
     max-width: 400px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
+    text-align: center;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* 🌟 Effet d'apparition fluide */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 🎨 Style des champs de saisie inspirés de macOS */
+input, select {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    width: 100%;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* 🌙 Placeholder plus subtil */
+input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+/* 📌 Effet au focus */
+input:focus, select:focus {
+    background: rgba(255, 255, 255, 0.5);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Styles des champs de saisie et des boutons */
-input, button, select {
-    display: block;
-    margin: 10px 0;
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+/* 🎛️ Style des boutons façon macOS */
+button {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
     font-size: 16px;
 }
 
-/* Styles spécifiques aux boutons */
-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
+/* 🌟 Effet au survol */
 button:hover {
-    background-color: #0056b3;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
 }
 
-/* Messages d'erreur */
-.error {
-    color: red;
-    font-size: 0.9em;
+/* 🚀 Effet "pressé" */
+button:active {
+    transform: scale(0.98);
 }
 
-/* Affichage des dépenses */
+/* 📋 Liste des dépenses avec effet carte macOS */
 .expense-item {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #f1f1f1;
-    padding: 8px;
-    border-radius: 5px;
-    margin-bottom: 5px;
+    transition: all 0.3s ease;
 }
 
-/* Conteneurs des catégories */
+/* 🎭 Catégories affichées avec un effet translucide */
 .category-container {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 12px;
     margin-top: 10px;
-    background: #e9ecef;
-    padding: 10px;
-    border-radius: 5px;
 }
 
-/* En-têtes des catégories */
+/* 🔻 Effet au clic sur les catégories */
 .category-header {
     cursor: pointer;
     font-weight: bold;
-    padding: 8px;
-    background: #dee2e6;
-    border-radius: 5px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    transition: all 0.3s ease;
 }
 
-/* Détails des dépenses */
-.category-details {
-    display: none;
-    margin-left: 20px;
+.category-header:hover {
+    background: rgba(255, 255, 255, 0.6);
 }
-/* Styles pour la fenêtre modale */
+
+/* 📜 Texte des erreurs en rouge doux */
+.error {
+    color: #d63031;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+/* 🌙 Effet pour la popup (modale) */
 .modal {
     display: none;
     position: fixed;
@@ -88,19 +135,22 @@ button:hover {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
+/* 💎 Fenêtre modale avec effet Glassmorphism */
 .modal-content {
-    background-color: white;
-    margin: 10% auto;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
     padding: 20px;
-    border: 1px solid #888;
     width: 50%;
-    border-radius: 8px;
+    margin: 10% auto;
     text-align: center;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* ❌ Bouton de fermeture de la modale */
 .close {
     float: right;
     font-size: 24px;
