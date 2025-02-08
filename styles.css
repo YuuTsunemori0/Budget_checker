@@ -116,3 +116,45 @@ button:hover {
     text-align: center;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }
+/* 🏗️ Mise en page en grille */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    width: 90%;
+    max-width: 1200px;
+    height: 90vh;
+    margin: auto;
+}
+
+/* 📌 Section générale */
+.form-section, .expenses-section, .budget-section {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+/* 📝 Formulaire */
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+}
+
+/* 📋 Liste des Dépenses */
+.expenses-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.expenses-section ul li {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
