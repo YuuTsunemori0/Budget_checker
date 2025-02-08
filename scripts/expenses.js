@@ -26,6 +26,7 @@ function ajouterDepense() {
     total += montant;
     localStorage.setItem("expenses", JSON.stringify(expenses));
     afficherDepenses();
+    mettreAJourTotal();
     
     document.getElementById("libelle").value = "";
     document.getElementById("montant").value = "";
