@@ -34,12 +34,12 @@
         <!-- Fenêtre modale pour gérer les catégories -->
         <div id="modalCategories" class="modal">
             <div class="modal-content">
+                <span class="close" onclick="fermerGestionCategories()">&times;</span>
                 <h3>Gérer les catégories</h3>
                 <input type="text" id="nouvelleCategorie" placeholder="Nom de la catégorie">
                 <input type="text" id="emojiCategorie" placeholder="Emoji (ex: 🏡)">
                 <button onclick="ajouterCategorie()">Ajouter</button>
                 <ul id="listeCategories"></ul>
-                <button onclick="fermerGestionCategories()">Fermer</button>
             </div>
         </div>
 
