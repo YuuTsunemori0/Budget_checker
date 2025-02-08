@@ -12,6 +12,7 @@ function ajouterDepense() {
     // Réinitialisation des erreurs
     document.getElementById("errorLibelle").textContent = "";
     document.getElementById("errorMontant").textContent = "";
+    document.getElementById("errorCategorie").textContent = "";
 
     // Vérification des champs obligatoires
     if (!libelle) {
@@ -23,7 +24,7 @@ function ajouterDepense() {
         valid = false;
     }
     if (!categorie) {
-        alert("Veuillez sélectionner une catégorie.");
+        document.getElementById("errorCategorie").textContent = "Veuillez sélectionner un type de dépense.";
         valid = false;
     }
     if (!valid) return;
@@ -46,20 +47,4 @@ function ajouterDepense() {
     document.getElementById("libelle").value = "";
     document.getElementById("montant").value = "";
     document.getElementById("categorie").selectedIndex = 0;
-}
-
-// Fonction pour supprimer une dépense
-function supprimerDepense(index) {
-    const expense = expenses[index];
-    subtotals[expense.categorie] -= expense.montant;
-    total -= expense.montant;
-    
-    // Suppression de la dépense
-    expenses.splice(index, 1);
-    localStorage.setItem("expenses", JSON.stringify(expenses));
-
-    // Mise à jour de l'affichage et du budget restant
-    afficherDepenses();
-    mettreAJourTotal();
-    mettreAJourBudgetRestant();
 }
