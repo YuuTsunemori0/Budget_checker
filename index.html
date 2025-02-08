@@ -4,45 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Budget Voyage</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-        }
-        input, button, select {
-            display: block;
-            margin: 10px 0;
-            width: 100%;
-            padding: 10px;
-        }
-        #total, .subtotal {
-            font-weight: bold;
-        }
-        .error {
-            color: red;
-            font-size: 0.9em;
-        }
-        .expense-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .category-container {
-            margin-top: 10px;
-        }
-        .category-header {
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .category-details {
-            display: none;
-            margin-left: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -50,10 +12,13 @@
         <label for="budgetTotal">Budget Total :</label>
         <input type="text" id="budgetTotal" placeholder="Définir un budget total" oninput="formatMontant(this)">
         <p>Budget restant : <span id="budgetRestant">0</span> €</p>
+        
         <input type="text" id="libelle" placeholder="Libellé">
         <p class="error" id="errorLibelle"></p>
+        
         <input type="text" id="montant" placeholder="Montant" oninput="formatMontant(this)">
         <p class="error" id="errorMontant"></p>
+        
         <select id="categorie">
             <option value="" disabled selected>Type de dépense</option>
             <option value="Logement">🏠 Logement</option>
@@ -61,88 +26,19 @@
             <option value="Nourriture">🍔 Nourriture</option>
             <option value="Loisirs">🎟️ Loisirs</option>
         </select>
+
         <button onclick="ajouterDepense()">Ajouter</button>
         <button onclick="reinitialiserDepenses()">Réinitialiser</button>
+
         <p>Total : <span id="total">0</span> €</p>
         
         <div id="categories"></div>
     </div>
 
-    <script>
-        let total = 0;
-        let budgetTotal = 0;
-        let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-        let subtotals = { Logement: 0, Transport: 0, Nourriture: 0, Loisirs: 0 };
-
-        function formatMontant(input) {
-            let value = input.value.replace(/\D/g, "");
-            input.value = new Intl.NumberFormat("fr-FR").format(value);
-        }
-
-        function ajouterDepense() {
-            const libelle = document.getElementById("libelle").value;
-            const montant = parseFloat(document.getElementById("montant").value.replace(/\s/g, ""));
-            const categorie = document.getElementById("categorie").value;
-            let valid = true;
-            
-            document.getElementById("errorLibelle").textContent = "";
-            document.getElementById("errorMontant").textContent = "";
-            
-            if (!libelle) {
-                document.getElementById("errorLibelle").textContent = "Veuillez saisir un libellé.";
-                valid = false;
-            }
-            if (isNaN(montant) || montant <= 0) {
-                document.getElementById("errorMontant").textContent = "Veuillez saisir un montant valide.";
-                valid = false;
-            }
-            if (!valid) return;
-
-            expenses.push({ libelle, montant, categorie });
-            subtotals[categorie] += montant;
-            total += montant;
-            localStorage.setItem("expenses", JSON.stringify(expenses));
-            afficherDepenses();
-            
-            document.getElementById("libelle").value = "";
-            document.getElementById("montant").value = "";
-            document.getElementById("categorie").selectedIndex = 0;
-        }
-
-        function afficherDepenses() {
-            const categoriesContainer = document.getElementById("categories");
-            categoriesContainer.innerHTML = "";
-            total = 0;
-            subtotals = { Logement: 0, Transport: 0, Nourriture: 0, Loisirs: 0 };
-
-            let groupedExpenses = {};
-            expenses.forEach((expense, index) => {
-                if (!groupedExpenses[expense.categorie]) {
-                    groupedExpenses[expense.categorie] = [];
-                }
-                groupedExpenses[expense.categorie].push({ ...expense, index });
-                total += expense.montant;
-                subtotals[expense.categorie] += expense.montant;
-            });
-            
-            Object.keys(groupedExpenses).forEach(category => {
-                const categoryElement = document.createElement("div");
-                categoryElement.classList.add("category-container");
-                categoryElement.innerHTML = `<p class="category-header" onclick="toggleCategory('${category}')">${category} : ${new Intl.NumberFormat("fr-FR").format(subtotals[category])} € ▼</p>`;
-                
-                const detailsElement = document.createElement("div");
-                detailsElement.classList.add("category-details");
-                detailsElement.id = `details-${category}`;
-                groupedExpenses[category].forEach(expense => {
-                    const detail = document.createElement("p");
-                    detail.innerHTML = `${expense.libelle} : ${new Intl.NumberFormat("fr-FR").format(expense.montant)} € <button onclick="supprimerDepense(${expense.index})">🗑️</button>`;
-                    detailsElement.appendChild(detail);
-                });
-                categoryElement.appendChild(detailsElement);
-                categoriesContainer.appendChild(categoryElement);
-            });
-            document.getElementById("total").textContent = new Intl.NumberFormat("fr-FR").format(total);
-        }
-    </script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/budget.js"></script>
+    <script src="scripts/expenses.js"></script>
+    <script src="scripts/ui.js"></script>
 </body>
 </html>
+
