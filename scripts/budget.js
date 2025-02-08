@@ -4,12 +4,17 @@ let total = 0;
 // Fonction pour mettre à jour le budget restant
 function mettreAJourBudgetRestant() {
     const budgetInput = document.getElementById("budgetTotal").value.replace(/\s/g, "").replace(",", ".");
-    budgetTotal = parseFloat(budgetInput) || 0; // Si vide, le budget est 0
+    budgetTotal = parseFloat(budgetInput) || 0; // Si vide, budget = 0
     const budgetRestant = budgetTotal - total;
 
     // Afficher le budget restant formaté
     document.getElementById("budgetRestant").textContent = new Intl.NumberFormat("fr-FR").format(budgetRestant);
 }
+
+// Fonction pour mettre à jour le budget total lors de la saisie
+document.getElementById("budgetTotal").addEventListener("input", () => {
+    mettreAJourBudgetRestant();
+});
 
 // Fonction pour réinitialiser toutes les dépenses et le budget
 function reinitialiserDepenses() {
