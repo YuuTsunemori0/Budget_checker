@@ -13,7 +13,7 @@
             max-width: 400px;
             margin: auto;
         }
-        input, button {
+        input, button, select {
             display: block;
             margin: 10px 0;
             width: 100%;
@@ -22,6 +22,11 @@
         #total {
             font-weight: bold;
         }
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -29,28 +34,66 @@
         <h2>Calculateur de Budget</h2>
         <input type="text" id="libelle" placeholder="Libellé">
         <input type="number" id="montant" placeholder="Montant">
+        <select id="categorie">
+            <option value="🏠">Logement</option>
+            <option value="🚕">Transport</option>
+            <option value="🍔">Nourriture</option>
+            <option value="🎟️">Loisirs</option>
+        </select>
         <button onclick="ajouterDepense()">Ajouter</button>
         <ul id="liste"></ul>
         <p>Total : <span id="total">0</span> €</p>
+        <button onclick="convertirDevise()">Convertir en JPY</button>
     </div>
 
     <script>
         let total = 0;
+        let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
         function ajouterDepense() {
             const libelle = document.getElementById("libelle").value;
             const montant = parseFloat(document.getElementById("montant").value);
+            const categorie = document.getElementById("categorie").value;
+
             if (libelle && !isNaN(montant) && montant > 0) {
-                const liste = document.getElementById("liste");
-                const element = document.createElement("li");
-                element.textContent = `${libelle} : ${montant} €`;
-                liste.appendChild(element);
-                total += montant;
-                document.getElementById("total").textContent = total;
-                document.getElementById("libelle").value = "";
-                document.getElementById("montant").value = "";
+                expenses.push({ libelle, montant, categorie });
+                localStorage.setItem("expenses", JSON.stringify(expenses));
+                afficherDepenses();
             }
         }
+
+        function afficherDepenses() {
+            const liste = document.getElementById("liste");
+            liste.innerHTML = "";
+            total = 0;
+
+            expenses.forEach((expense, index) => {
+                const element = document.createElement("li");
+                element.classList.add("expense-item");
+                element.innerHTML = `${expense.categorie} ${expense.libelle} : ${expense.montant} € <button onclick="supprimerDepense(${index})">🗑️</button>`;
+                liste.appendChild(element);
+                total += expense.montant;
+            });
+            document.getElementById("total").textContent = total;
+        }
+
+        function supprimerDepense(index) {
+            expenses.splice(index, 1);
+            localStorage.setItem("expenses", JSON.stringify(expenses));
+            afficherDepenses();
+        }
+
+        function convertirDevise() {
+            fetch("https://api.exchangerate-api.com/v4/latest/EUR")
+                .then(response => response.json())
+                .then(data => {
+                    const taux = data.rates.JPY;
+                    document.getElementById("total").textContent = (total * taux).toFixed(2) + " ¥";
+                })
+                .catch(error => console.error("Erreur lors de la conversion", error));
+        }
+
+        document.addEventListener("DOMContentLoaded", afficherDepenses);
     </script>
 </body>
 </html>
