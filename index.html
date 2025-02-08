@@ -8,10 +8,22 @@
 </head>
 <body>
     <div class="container">
-        <h1>💰 Budget Voyage</h1>
+        <div class="grid-layout">
 
-        <div class="grid-container">
-            <!-- 📋 Formulaire Ajout Dépense -->
+            <!-- 📜 Liste des Dépenses -->
+            <div class="expenses-section">
+                <h2>📜 Liste des Dépenses</h2>
+                <div id="listeDepenses"></div>
+            </div>
+
+            <!-- 💰 Budget Personnel -->
+            <div class="budget-section">
+                <h2>💰 Budget</h2>
+                <input type="text" id="budgetTotal" placeholder="Définir un budget total" oninput="mettreAJourBudget()">
+                <p id="budgetRestant" class="budget-positive">0 €</p>
+            </div>
+
+            <!-- ➕ Ajouter une Dépense -->
             <div class="form-section">
                 <h2>➕ Ajouter une Dépense</h2>
                 <input type="text" id="libelle" placeholder="Libellé">
@@ -25,110 +37,16 @@
                 </select>
                 <p class="error" id="errorCategorie"></p>
 
-                <button onclick="ajouterDepense()">Ajouter</button>
-                <button onclick="reinitialiserDepenses()">Réinitialiser</button>
-            </div>
-
-            <!-- 📋 Affichage des Dépenses -->
-            <div class="expenses-section">
-                <h2>📜 Liste des Dépenses</h2>
-                <ul id="listeDepenses"></ul>
-                <p>Total : <span id="total">0</span> €</p>
-            </div>
-
-            <!-- 📌 Section Budget & Gestion des Catégories -->
-            <div class="budget-section">
-                <h2>💰 Budget</h2>
-                <label for="budgetTotal">Budget Total :</label>
-                <input type="text" id="budgetTotal" placeholder="Définir un budget total">
-                <p>Budget restant : <span id="budgetRestant">0</span> €</p>
-
-                <h2>🎭 Gérer les Catégories</h2>
-                <button onclick="ouvrirGestionCategories()">🛠️ Gérer</button>
-
-                <div id="modalCategories" class="modal">
-                    <div class="modal-content">
-                        <span class="close" onclick="fermerGestionCategories()">&times;</span>
-                        <h3>Ajouter une Catégorie</h3>
-                        <input type="text" id="nouvelleCategorie" placeholder="Nom">
-                        <input type="text" id="emojiCategorie" placeholder="Emoji (ex: 🏡)">
-                        <button onclick="ajouterCategorie()">Ajouter</button>
-                        <h3>📋 Liste des Catégories</h3>
-                        <ul id="listeCategories"></ul>
-                    </div>
+                <div class="button-container">
+                    <button onclick="ajouterDepense()">Ajouter</button>
+                    <button onclick="reinitialiserDepenses()">Réinitialiser</button>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <!-- 🔥 Firebase Configuration -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, Timestamp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCy8_7PjzpZi4I75dtBapp42OpDbd1TYOw",
-            authDomain: "budget-checker.firebaseapp.com",
-            projectId: "budget-checker",
-            storageBucket: "budget-checker.firebasestorage.app",
-            messagingSenderId: "190621017450",
-            appId: "1:190621017450:web:1491f535d6c5913b22b113",
-            measurementId: "G-R10JVNYPZ1"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        async function ajouterDepense() {
-            const libelle = document.getElementById("libelle").value.trim();
-            const montantStr = document.getElementById("montant").value.trim();
-            const categorie = document.getElementById("categorie").value;
-
-            if (!libelle || !montantStr || !categorie) {
-                alert("Veuillez remplir tous les champs !");
-                return;
-            }
-
-            const montant = parseFloat(montantStr.replace(",", "."));
-            if (isNaN(montant) || montant <= 0) {
-                alert("Veuillez entrer un montant valide !");
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, "depenses"), {
-                    libelle,
-                    montant,
-                    categorie,
-                    date: Timestamp.now()
-                });
-                afficherDepenses();
-            } catch (error) {
-                console.error("❌ Erreur lors de l'ajout :", error);
-            }
-        }
-
-        async function afficherDepenses() {
-            const liste = document.getElementById("listeDepenses");
-            liste.innerHTML = "";
-            let total = 0;
-
-            const querySnapshot = await getDocs(collection(db, "depenses"));
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                total += data.montant;
-                const li = document.createElement("li");
-                li.textContent = `${data.libelle} - ${data.montant}€ (${data.categorie})`;
-                liste.appendChild(li);
-            });
-
-            document.getElementById("total").textContent = total;
-        }
-
-        afficherDepenses();
-    </script>
-
-    <!-- Inclusion des scripts -->
+    <!-- 📜 Inclusion des scripts JavaScript -->
     <script src="scripts/main.js"></script>
     <script src="scripts/budget.js"></script>
     <script src="scripts/expenses.js"></script>
