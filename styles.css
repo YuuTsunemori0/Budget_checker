@@ -1,37 +1,43 @@
-/* 🌄 Fond général en plein écran */
-body {
-    background: linear-gradient(135deg, #e3eaf2, #c9d6df);
-    font-family: "SF Pro Display", sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+/* 🌄 Mise en page globale */
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "SF Pro Display", sans-serif;
 }
 
-/* 🎨 Conteneur principal en mode écran large */
-.container {
+body {
+    background: linear-gradient(135deg, #e3eaf2, #c9d6df);
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    width: 90%;
-    max-width: 1200px;
-    height: 90vh;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
     padding: 20px;
 }
 
-/* 📌 Grille pour une meilleure disposition */
-.main-content {
+/* 🏗️ Grille principale */
+.grid-layout {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 1.5fr 1fr;
     gap: 20px;
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    max-width: 1200px;
+    height: auto;
 }
 
-/* 📊 Section du budget */
+/* 📜 Liste des Dépenses */
+.expenses-section {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* 📌 Budget */
 .budget-section {
     text-align: center;
     padding: 20px;
@@ -39,43 +45,68 @@ body {
     backdrop-filter: blur(15px);
     border-radius: 15px;
     box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
-}
-
-/* 📋 Section des dépenses */
-.expenses-section {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(15px);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
-    height: 100%;
-    overflow-y: auto;
-}
-
-/* 🎭 Section des catégories */
-.categories-section {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(15px);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
-}
-
-/* 📌 Formulaire de saisie */
-input, select {
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    border: none;
-    padding: 12px;
-    border-radius: 10px;
     width: 100%;
-    font-size: 16px;
-    color: #333;
-    outline: none;
+    max-width: 300px;
+    height: fit-content;
+}
+
+/* 💰 Budget restant */
+#budgetRestant {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 10px;
     transition: all 0.3s ease;
 }
 
-/* 🎛️ Style des boutons façon macOS */
+.budget-positive {
+    background: green;
+    color: white;
+}
+
+.budget-negative {
+    background: red;
+    color: white;
+}
+
+/* ➕ Formulaire Ajout Dépense */
+.form-section {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: fit-content;
+}
+
+/* 📝 Inputs et Sélecteur */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    outline: none;
+    font-size: 16px;
+}
+
+input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+/* 📌 Effet au focus */
+input:focus, select:focus {
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 🎛️ Boutons */
 button {
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
@@ -86,11 +117,80 @@ button {
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 16px;
+    margin: 10px 5px;
 }
 
+/* 🌟 Effet au survol */
 button:hover {
     background: rgba(255, 255, 255, 0.5);
     transform: scale(1.05);
+}
+
+/* 🚀 Effet "pressé" */
+button:active {
+    transform: scale(0.98);
+}
+
+/* 🎭 Gestion des catégories */
+.category {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.category h3 {
+    cursor: pointer;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* 🔻 Effet au clic sur les catégories */
+.category.open ul {
+    display: block;
+}
+
+.category ul {
+    display: none;
+    list-style: none;
+    padding-left: 15px;
+    margin-top: 5px;
+}
+
+.category ul li {
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ❌ Bouton Supprimer */
+.delete-btn {
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 📜 Liste Dépenses */
+#listeDepenses {
+    list-style: none;
+    padding: 0;
+}
+
+#listeDepenses li {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* 🌙 Effet pour la popup (modale) */
@@ -116,45 +216,26 @@ button:hover {
     text-align: center;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }
-/* 🏗️ Mise en page en grille */
-.grid-container {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    gap: 20px;
-    width: 90%;
-    max-width: 1200px;
-    height: 90vh;
-    margin: auto;
+
+/* ❌ Bouton de fermeture de la modale */
+.close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
 }
 
-/* 📌 Section générale */
-.form-section, .expenses-section, .budget-section {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(15px);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
+/* 🌟 Effet d'apparition fluide */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
-/* 📝 Formulaire */
-input, select {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 10px;
-    border: none;
-}
-
-/* 📋 Liste des Dépenses */
-.expenses-section ul {
-    list-style: none;
-    padding: 0;
-}
-
-.expenses-section ul li {
-    background: rgba(255, 255, 255, 0.3);
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 8px;
+.container {
+    animation: fadeIn 0.6s ease-out;
 }
