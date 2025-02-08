@@ -8,51 +8,133 @@
 </head>
 <body>
     <div class="container">
-        <h2>Calculateur de Budget</h2>
+        <h1>💰 Budget Voyage</h1>
 
-        <!-- Budget total -->
-        <label for="budgetTotal">Budget Total :</label>
-        <input type="text" id="budgetTotal" placeholder="Définir un budget total" oninput="formatMontant(this)">
-        <p>Budget restant : <span id="budgetRestant">0</span> €</p>
-
-        <!-- Saisie des dépenses -->
-        <input type="text" id="libelle" placeholder="Libellé">
-        <p class="error" id="errorLibelle"></p>
-
-        <input type="text" id="montant" placeholder="Montant" oninput="formatMontant(this)">
-        <p class="error" id="errorMontant"></p>
-
-        <!-- Menu déroulant des catégories -->
-        <select id="categorie">
-            <option value="" disabled selected>Type de dépense</option>
-        </select>
-        <p class="error" id="errorCategorie"></p>
-
-        <!-- Bouton pour gérer les catégories -->
-        <button onclick="ouvrirGestionCategories()">Gérer les catégories</button>
-
-        <!-- Fenêtre modale pour gérer les catégories -->
-        <div id="modalCategories" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="fermerGestionCategories()">&times;</span>
-                <h3>Gérer les catégories</h3>
-                <input type="text" id="nouvelleCategorie" placeholder="Nom de la catégorie">
-                <input type="text" id="emojiCategorie" placeholder="Emoji (ex: 🏡)">
-                <button onclick="ajouterCategorie()">Ajouter</button>
-                <ul id="listeCategories"></ul>
-            </div>
+        <!-- 📌 Section Budget -->
+        <div class="budget-section">
+            <label for="budgetTotal">Budget Total :</label>
+            <input type="text" id="budgetTotal" placeholder="Définir un budget total">
+            <p>Budget restant : <span id="budgetRestant">0</span> €</p>
         </div>
 
-        <!-- Boutons -->
-        <button onclick="ajouterDepense()">Ajouter</button>
-        <button onclick="reinitialiserDepenses()">Réinitialiser</button>
+        <div class="main-content">
+            <!-- 📋 Formulaire Ajout Dépense -->
+            <div class="form-section">
+                <h2>➕ Ajouter une Dépense</h2>
+                <input type="text" id="libelle" placeholder="Libellé">
+                <p class="error" id="errorLibelle"></p>
 
-        <!-- Affichage du total -->
-        <p>Total : <span id="total">0</span> €</p>
+                <input type="text" id="montant" placeholder="Montant">
+                <p class="error" id="errorMontant"></p>
 
-        <!-- Affichage des catégories et dépenses -->
-        <div id="categories"></div>
+                <select id="categorie">
+                    <option value="" disabled selected>Type de dépense</option>
+                </select>
+                <p class="error" id="errorCategorie"></p>
+
+                <button onclick="ajouterDepense()">Ajouter</button>
+                <button onclick="reinitialiserDepenses()">Réinitialiser</button>
+            </div>
+
+            <!-- 📋 Affichage des Dépenses -->
+            <div class="expenses-section">
+                <h2>📜 Liste des Dépenses</h2>
+                <ul id="listeDepenses"></ul>
+                <p>Total : <span id="total">0</span> €</p>
+            </div>
+
+            <!-- 🎭 Gestion des Catégories -->
+            <div class="categories-section">
+                <h2>🎭 Gérer les Catégories</h2>
+                <button onclick="ouvrirGestionCategories()">🛠️ Gérer</button>
+
+                <div id="modalCategories" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="fermerGestionCategories()">&times;</span>
+                        <h3>Ajouter une Catégorie</h3>
+                        <input type="text" id="nouvelleCategorie" placeholder="Nom">
+                        <input type="text" id="emojiCategorie" placeholder="Emoji (ex: 🏡)">
+                        <button onclick="ajouterCategorie()">Ajouter</button>
+                        <h3>📋 Liste des Catégories</h3>
+                        <ul id="listeCategories"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- 🔥 Firebase Configuration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, Timestamp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
+
+        // 🔥 Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCy8_7PjzpZi4I75dtBapp42OpDbd1TYOw",
+            authDomain: "budget-checker.firebaseapp.com",
+            projectId: "budget-checker",
+            storageBucket: "budget-checker.firebasestorage.app",
+            messagingSenderId: "190621017450",
+            appId: "1:190621017450:web:1491f535d6c5913b22b113",
+            measurementId: "G-R10JVNYPZ1"
+        };
+
+        // 🔥 Initialiser Firebase & Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 📌 Fonction pour ajouter une dépense dans Firestore
+        async function ajouterDepense() {
+            const libelle = document.getElementById("libelle").value.trim();
+            const montantStr = document.getElementById("montant").value.trim();
+            const categorie = document.getElementById("categorie").value;
+
+            if (!libelle || !montantStr || !categorie) {
+                alert("Veuillez remplir tous les champs !");
+                return;
+            }
+
+            const montant = parseFloat(montantStr.replace(",", "."));
+            if (isNaN(montant) || montant <= 0) {
+                alert("Veuillez entrer un montant valide !");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "depenses"), {
+                    libelle,
+                    montant,
+                    categorie,
+                    date: Timestamp.now()
+                });
+                console.log("✅ Dépense ajoutée avec succès !");
+                afficherDepenses();
+            } catch (error) {
+                console.error("❌ Erreur lors de l'ajout :", error);
+            }
+        }
+
+        // 📌 Fonction pour récupérer et afficher les dépenses
+        async function afficherDepenses() {
+            const liste = document.getElementById("listeDepenses");
+            liste.innerHTML = "";
+            let total = 0;
+
+            const querySnapshot = await getDocs(collection(db, "depenses"));
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                total += data.montant;
+                const li = document.createElement("li");
+                li.textContent = `${data.libelle} - ${data.montant}€ (${data.categorie})`;
+                liste.appendChild(li);
+            });
+
+            document.getElementById("total").textContent = total;
+        }
+
+        // 📌 Chargement des dépenses au démarrage
+        afficherDepenses();
+    </script>
 
     <!-- Inclusion des scripts -->
     <script src="scripts/main.js"></script>
