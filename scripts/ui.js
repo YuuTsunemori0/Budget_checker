@@ -1,3 +1,14 @@
+function formatMontant(input) {
+    let value = input.value.replace(/\D/g, "");
+    if (value) {
+        input.value = new Intl.NumberFormat("fr-FR").format(value);
+    }
+}
+
+function mettreAJourTotal() {
+    document.getElementById("total").textContent = new Intl.NumberFormat("fr-FR").format(total);
+}
+
 function afficherDepenses() {
     const categoriesContainer = document.getElementById("categories");
     categoriesContainer.innerHTML = "";
@@ -32,20 +43,10 @@ function afficherDepenses() {
         categoriesContainer.appendChild(categoryElement);
     });
 
-    document.getElementById("total").textContent = new Intl.NumberFormat("fr-FR").format(total);
+    mettreAJourTotal();
 }
 
 function toggleCategory(category) {
     const details = document.getElementById(`details-${category}`);
     details.style.display = details.style.display === "none" || details.style.display === "" ? "block" : "none";
-}
-function formatMontant(input) {
-    let value = input.value.replace(/\D/g, "");
-    if (value) {
-        input.value = new Intl.NumberFormat("fr-FR").format(value);
-    }
-}
-
-function mettreAJourTotal() {
-    document.getElementById("total").textContent = new Intl.NumberFormat("fr-FR").format(total);
 }
