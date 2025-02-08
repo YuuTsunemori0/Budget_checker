@@ -37,9 +37,10 @@ function ajouterDepense() {
     // Stockage dans le localStorage
     localStorage.setItem("expenses", JSON.stringify(expenses));
 
-    // Mise à jour de l'affichage
+    // Mise à jour de l'affichage et du budget restant
     afficherDepenses();
     mettreAJourTotal();
+    mettreAJourBudgetRestant();
 
     // Réinitialisation des champs après ajout
     document.getElementById("libelle").value = "";
@@ -57,7 +58,8 @@ function supprimerDepense(index) {
     expenses.splice(index, 1);
     localStorage.setItem("expenses", JSON.stringify(expenses));
 
-    // Mise à jour de l'affichage
+    // Mise à jour de l'affichage et du budget restant
     afficherDepenses();
     mettreAJourTotal();
+    mettreAJourBudgetRestant();
 }
