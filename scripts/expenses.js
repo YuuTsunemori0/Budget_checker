@@ -1,3 +1,7 @@
+let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+let subtotals = { Logement: 0, Transport: 0, Nourriture: 0, Loisirs: 0 };
+
+// Fonction pour ajouter une nouvelle dépense
 function ajouterDepense() {
     const libelle = document.getElementById("libelle").value.trim();
     const montantStr = document.getElementById("montant").value.replace(/\s/g, "").replace(",", ".");
@@ -30,7 +34,7 @@ function ajouterDepense() {
     subtotals[categorie] += montant;
     total += montant;
 
-    // Stocker dans le localStorage
+    // Stockage dans le localStorage
     localStorage.setItem("expenses", JSON.stringify(expenses));
 
     // Mise à jour de l'affichage
@@ -41,4 +45,19 @@ function ajouterDepense() {
     document.getElementById("libelle").value = "";
     document.getElementById("montant").value = "";
     document.getElementById("categorie").selectedIndex = 0;
+}
+
+// Fonction pour supprimer une dépense
+function supprimerDepense(index) {
+    const expense = expenses[index];
+    subtotals[expense.categorie] -= expense.montant;
+    total -= expense.montant;
+    
+    // Suppression de la dépense
+    expenses.splice(index, 1);
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+
+    // Mise à jour de l'affichage
+    afficherDepenses();
+    mettreAJourTotal();
 }
